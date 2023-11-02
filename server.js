@@ -1,17 +1,33 @@
-"use strict"
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+const express = require('express');
 
-const express = require("express")
-const route = require("./src/routes/routes.js") 
-const app = express()
+const app = express();
 
-app.use("/", route)
+// Certificate
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/nsh16.lumosdao.io/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/nsh16.lumosdao.io/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/nsh16.lumosdao.io/chain.pem', 'utf8');
 
-let port = process.env.PORT || 4000
+const credentials = {
+	key: privateKey,
+	cert: certificate,
+	ca: ca
+};
 
-app.listen(port, () => {
-    // eslint-disable-next-line no-console
-    console.log(`App listening on port ${port}`)
-})
+app.use((req, res) => {
+	res.send('Hello there !');
+});
 
+// Starting both http & https servers
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
 
- 
+httpServer.listen(80, () => {
+	console.log('HTTP Server running on port 80');
+});
+
+httpsServer.listen(443, () => {
+	console.log('HTTPS Server running on port 443');
+});
