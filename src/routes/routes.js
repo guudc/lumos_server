@@ -17,7 +17,7 @@ router.use((req, res, next) => {
     next();
 });
 
-router.post('/wrap', controller.wrap)
+router.get('/wrap', controller.wrap)
 
 //listen to 404 request
 router.get("*", (req, res) =>{

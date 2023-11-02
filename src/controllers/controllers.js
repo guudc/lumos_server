@@ -5,8 +5,8 @@ const { exec } = require('child_process');
 //to wrap tokens user
 exports.wrap = (req, res) => {
     //create new wallet address
-    try{    
-        req = req.body;
+    try{  
+        req = req.query;
         if(req.code && req.issuer){  
             // Replace 'your-shell-command' with the actual shell command you want to execute.
             const cmd = 'soroban lab token wrap --network testnet --asset "' + req.code + ':' + req.issuer + '"'
