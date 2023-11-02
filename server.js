@@ -2,6 +2,8 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const express = require('express');
+const route = require("./src/routes/routes.js") 
+
 
 const app = express();
 
@@ -16,9 +18,7 @@ const credentials = {
 	ca: ca
 };
 
-app.use((req, res) => {
-	res.send('Hello there !');
-});
+app.use("/", route)
 
 // Starting both http & https servers
 //const httpServer = http.createServer(app);
