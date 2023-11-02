@@ -17,16 +17,16 @@ exports.wrap = (req, res) => {
                         msg = 'exists'
                     }
                     else {msg = 'something went wrong'}
-                    res.send(JSON.stringify({status:error, msg:msg}))
+                    res.send(JSON.stringify({status:"error", msg:msg}))
                 }else if (stderr) {
-                    res.send(JSON.stringify({status:error, msg:'something went wrong'}))
+                    res.send(JSON.stringify({status:"error", msg:'something went wrong'}))
                 }
                 else {
                     res.send(JSON.stringify({status:true, id:stdout}))
                 }
             });
         }
-        else{res.send(JSON.stringify({status:error, msg:'fields missing'}))}
+        else{res.send(JSON.stringify({status:'error', msg:'fields missing'}))}
     }
-    catch(e){console.log(e);res.send(JSON.stringify({status:error, msg:'something went wrong'}))}    
+    catch(e){console.log(e);res.send(JSON.stringify({status:'error', msg:'something went wrong'}))}    
 }  
