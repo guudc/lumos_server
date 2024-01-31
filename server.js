@@ -1,33 +1,24 @@
-const fs = require('fs');
-const http = require('http');
-const https = require('https');
-const express = require('express');
+"use strict"
+
+const express = require("express")
+const { createServer } = require('node:http');
 const route = require("./src/routes/routes.js") 
-
-
-const app = express();
-
-// Certificate
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/nsh16.lumosdao.io/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/nsh16.lumosdao.io/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/nsh16.lumosdao.io/chain.pem', 'utf8');
-
-const credentials = {
-	key: privateKey,
-	cert: certificate,
-	ca: ca
-};
+const app = express()
+const { Server } = require("socket.io");
+const { connect } = require("./src/controllers/socket.js");
 
 app.use("/", route)
+const server = createServer(app);
+const io = new Server(server, {cors: {
+    origin: "*",
+}});
 
-// Starting both http & https servers
-//const httpServer = http.createServer(app);
-const httpsServer = https.createServer(credentials, app);
-
-// httpServer.listen(80, () => {
-// 	console.log('HTTP Server running on port 80');
-// });
-
-httpsServer.listen(443, () => {
-	console.log('HTTPS Server running on port 443');
+let port = process.env.PORT || 4000
+server.listen(port, () => {
+    console.log('server running at port ' + port);
 });
+io.on('connection', (socket) => {
+    connect(socket, io)
+});
+
+ 
