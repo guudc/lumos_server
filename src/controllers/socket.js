@@ -33,12 +33,13 @@ exports.connect = async (socket, io) => {
                     res = await res.text()
                     if(res != 0) {
                         //send to receiver
+                        const dte = (new Date(Date())).getTime()
                         if(USERS[data.receiver]) {
                             if(USERS[data.receiver].data.dao == socket.data.dao) {
                                 USERS[data.receiver].emit('msg', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id})
                             }
                         }
-                        callback({status:true, id:res})
+                        callback({status:true, id:res, date:dte})
                     }else {callback({status:false})}
                 }else{callback({status:false})}
             }    
@@ -62,10 +63,11 @@ exports.connect = async (socket, io) => {
                         if(res.ok) {
                             /* Send to all */
                             res = await res.text()
-                            if(res == 1) {
+                            if(res != 0) {
                                 //send to receiver
-                                socket.broadcast.emit('broadcast', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id, dao: socket.data.dao})
-                                callback({status:true})
+                                const dte = (new Date(Date())).getTime()
+                                socket.broadcast.emit('broadcast', {msg:data.msg, date:dte, sender:socket.data.id, dao: socket.data.dao})
+                                callback({status:true, id:res, date:dte})
                             }else {callback({status:false})}
                             
                         }    
