@@ -20,7 +20,7 @@ exports.connect = async (socket, io) => {
             USERS[data.id] = socket;
             socket.data = {id:data.id, dao:data.dao}
         }
-        else {callback({stauts:false})}
+        else {callback({status:false})}
     })
     //to send message to another user
     socket.on('msg', async (data, callback) => {
@@ -38,11 +38,11 @@ exports.connect = async (socket, io) => {
                                 USERS[data.receiver].emit('msg', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id})
                             }
                         }
-                        callback({stauts:true})
-                    }else {callback({stauts:false})}
-                }else{callback({stauts:false})}
+                        callback({status:true})
+                    }else {callback({status:false})}
+                }else{callback({status:false})}
             }    
-            else{callback({stauts:'logout'})}
+            else{callback({status:'logout'})}
         }
         else {
             callback({status:false})
@@ -65,17 +65,17 @@ exports.connect = async (socket, io) => {
                             if(res == 1) {
                                 //send to receiver
                                 socket.broadcast.emit('broadcast', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id, dao: socket.data.dao})
-                                callback({stauts:true})
-                            }else {callback({stauts:false})}
+                                callback({status:true})
+                            }else {callback({status:false})}
                             
                         }    
-                        else{callback({stauts:false})}
+                        else{callback({status:false})}
                     }
-                    else{callback({stauts:false})}
+                    else{callback({status:false})}
                 }
-                else{callback({stauts:false})}
+                else{callback({status:false})}
             }
-            else{callback({stauts:'logout'})}
+            else{callback({status:'logout'})}
         }
         //save to db first
         /* Send to all client */
