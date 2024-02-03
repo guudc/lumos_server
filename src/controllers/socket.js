@@ -36,7 +36,7 @@ exports.connect = async (socket, io) => {
                         const dte = (new Date(Date())).getTime()
                         if(USERS[data.receiver]) {
                             if(USERS[data.receiver].data.dao == socket.data.dao) {
-                                USERS[data.receiver].emit('msg', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id})
+                                USERS[data.receiver].emit('msg', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id, id:res})
                             }
                         }
                         callback({status:true, id:res, date:dte})
