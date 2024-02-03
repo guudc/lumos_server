@@ -31,14 +31,14 @@ exports.connect = async (socket, io) => {
                 if(res.ok) {
                     /* Send to client */
                     res = await res.text()
-                    if(res == 1) {
+                    if(res != 0) {
                         //send to receiver
                         if(USERS[data.receiver]) {
                             if(USERS[data.receiver].data.dao == socket.data.dao) {
                                 USERS[data.receiver].emit('msg', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id})
                             }
                         }
-                        callback({status:true})
+                        callback({status:true, id:res})
                     }else {callback({status:false})}
                 }else{callback({status:false})}
             }    
