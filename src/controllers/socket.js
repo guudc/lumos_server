@@ -26,23 +26,26 @@ exports.connect = async (socket, io) => {
     socket.on('msg', async (data, callback) => {
         //save to db first
         if(data.msg && data.receiver) {
-            if(USERS[socket.data.id].id === socket.id) {
-                let res = await fetch(`${BACKEND_API}send_msg&msg=` + encodeURIComponent(data.msg) + '&receiver=' + data.receiver + '&sender=' + socket.data.id + '&dao_id=' + socket.data.dao)
-                if(res.ok) {
-                    /* Send to client */
-                    res = await res.text()
-                    if(res != 0) {
-                        //send to receiver
-                        const dte = (new Date(Date())).getTime()
-                        if(USERS[data.receiver]) {
-                            if(USERS[data.receiver].data.dao == socket.data.dao) {
-                                USERS[data.receiver].emit('msg', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id, id:res})
+            if(USERS[socket.data.id]) {
+                if(USERS[socket.data.id].id === socket.id) {
+                    let res = await fetch(`${BACKEND_API}send_msg&msg=` + encodeURIComponent(data.msg) + '&receiver=' + data.receiver + '&sender=' + socket.data.id + '&dao_id=' + socket.data.dao)
+                    if(res.ok) {
+                        /* Send to client */
+                        res = await res.text()
+                        if(res != 0) {
+                            //send to receiver
+                            const dte = (new Date(Date())).getTime()
+                            if(USERS[data.receiver]) {
+                                if(USERS[data.receiver].data.dao == socket.data.dao) {
+                                    USERS[data.receiver].emit('msg', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id, id:res})
+                                }
                             }
-                        }
-                        callback({status:true, id:res, date:dte})
-                    }else {callback({status:false})}
-                }else{callback({status:false})}
-            }    
+                            callback({status:true, id:res, date:dte})
+                        }else {callback({status:false})}
+                    }else{callback({status:false})}
+                }    
+                else{callback({status:'logout'})}
+            }
             else{callback({status:'logout'})}
         }
         else {
