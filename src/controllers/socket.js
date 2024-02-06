@@ -61,7 +61,7 @@ exports.connect = async (socket, io) => {
                 let res = await fetch(`${BACKEND_API}isadmin&signer=` + socket.data.id + '&dao_id=' + socket.data.dao)
                 if(res.ok) {
                     res = await res.text()
-                    if(res == 1){
+                    if(res != 0){
                         res = await fetch(`${BACKEND_API}send_msg&msg=` + encodeURIComponent(data.msg) + '&receiver=all&sender=' + socket.data.id + '&dao_id=' + socket.data.dao)
                         if(res.ok) {
                             /* Send to all */
@@ -69,7 +69,7 @@ exports.connect = async (socket, io) => {
                             if(res != 0) {
                                 //send to receiver
                                 const dte = (new Date(Date())).getTime()
-                                socket.broadcast.emit('msg', {msg:data.msg, date:dte, sender:socket.data.id, dao: socket.data.dao})
+                                socket.broadcast.emit('msg', {msg:data.msg, date:dte, sender:socket.data.id, dao: socket.data.dao, id:res})
                                 callback({status:true, id:res, date:dte})
                             }else {callback({status:false})}
                             
