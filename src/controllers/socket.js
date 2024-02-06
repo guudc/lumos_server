@@ -69,7 +69,7 @@ exports.connect = async (socket, io) => {
                             if(res != 0) {
                                 //send to receiver
                                 const dte = (new Date(Date())).getTime()
-                                socket.broadcast.emit('broadcast', {msg:data.msg, date:dte, sender:socket.data.id, dao: socket.data.dao})
+                                socket.broadcast.emit('msg', {msg:data.msg, date:dte, sender:socket.data.id, dao: socket.data.dao})
                                 callback({status:true, id:res, date:dte})
                             }else {callback({status:false})}
                             
