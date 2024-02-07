@@ -33,9 +33,9 @@ exports.connect = async (socket, io) => {
                         /* Send to client */
                         res = await res.text()
                         if(res != 0) {
+                            const dte = (new Date(Date())).getTime()
                             callback({status:true, id:res, date:dte})
                             //send to receiver
-                            const dte = (new Date(Date())).getTime()
                             if(USERS[data.receiver]) {
                                 if(USERS[data.receiver].data.dao == socket.data.dao) {
                                     USERS[data.receiver].emit('msg', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id, id:res})
@@ -67,9 +67,9 @@ exports.connect = async (socket, io) => {
                             /* Send to all */
                             res = await res.text()
                             if(res != 0) {
+                                const dte = (new Date(Date())).getTime()
                                 callback({status:true, id:res, date:dte})
                                 //send to receiver
-                                const dte = (new Date(Date())).getTime()
                                 socket.broadcast.emit('msg', {msg:data.msg, date:dte, sender:socket.data.id, dao: socket.data.dao, id:res})
                             }else {callback({status:false})}
                             
