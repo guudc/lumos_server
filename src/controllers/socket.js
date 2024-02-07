@@ -12,7 +12,7 @@ exports.connect = async (socket, io) => {
     //to register user
     socket.on('register', async (data, callback) => {  
         //schronize
-        let res = await fetch(`${BACKEND_API}get_msg&signer=` + data.id + '&dao_id=' + data.dao)
+        let res = await fetch(`${BACKEND_API}get_msg&signer=` + data.id + '&dao_id=' + data.dao + '&index=' + data.index)
         if(res.ok) {
             res = JSON.parse(await res.text())
             callback({status:true, data:res})
