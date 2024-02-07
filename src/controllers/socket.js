@@ -85,6 +85,19 @@ exports.connect = async (socket, io) => {
         //save to db first
         /* Send to all client */
     })
+    //to read a message
+    socket.on('read', async (data) => {
+        if(socket.data.id) {
+            let res = await fetch(`${BACKEND_API}read_msg&reader=` + socket.data.id + '&sender=' + data.sender + '&id=' + data.msgId + '&dao_id=' + socket.data.dao)
+            if(res.ok) {
+                if(USERS[data.sender]) {
+                    if(USERS[data.sender].data.dao == socket.data.dao) {
+                        USERS[data.sender].emit('read', {id:data.msgId, reader:socket.data.id})
+                    }
+                }
+            }
+        }
+    })
     //disconnected
     socket.on('disconnect', (reason) => {
         //remove from list of servers
