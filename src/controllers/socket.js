@@ -19,6 +19,8 @@ exports.connect = async (socket, io) => {
             //then register
             USERS[data.id] = socket;
             socket.data = {id:data.id, dao:data.dao}
+            //broadcast online
+            socket.broadcast.emit('online', {user:data.id})
         }
         else {callback({status:false})}
     })
@@ -38,7 +40,7 @@ exports.connect = async (socket, io) => {
                             //send to receiver
                             if(USERS[data.receiver]) {
                                 if(USERS[data.receiver].data.dao == socket.data.dao) {
-                                    USERS[data.receiver].emit('msg', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id, id:res})
+                                    USERS[data.receiver].emit('msg', {msg:data.msg, date:(new Date(Date())).getTime(), sender:socket.data.id, id:res, receiver:data.receiver})
                                 }
                             }
                         }else {callback({status:false})}
@@ -70,7 +72,7 @@ exports.connect = async (socket, io) => {
                                 const dte = (new Date(Date())).getTime()
                                 callback({status:true, id:res, date:dte})
                                 //send to receiver
-                                socket.broadcast.emit('msg', {msg:data.msg, date:dte, sender:socket.data.id, dao: socket.data.dao, id:res})
+                                socket.broadcast.emit('msg', {msg:data.msg, date:dte, sender:socket.data.id, dao: socket.data.dao, id:res, receiver:'all'})
                             }else {callback({status:false})}
                             
                         }    
@@ -92,7 +94,8 @@ exports.connect = async (socket, io) => {
             if(res.ok) {
                 callback({status:true})
                 if(USERS[data.sender]) {
-                    if(USERS[data.sender].data.dao == socket.data.dao) {
+                    if(USERS[data.sender].data.dao == socket.data.dao && data.signal) {
+                        //the data.signal signifies, if you want the send to be notified, its disabled for broadcast messages
                         USERS[data.sender].emit('read', {id:data.msgId, reader:socket.data.id})
                     }
                 }
@@ -101,11 +104,43 @@ exports.connect = async (socket, io) => {
         }
         else {callback({status:'logout'})}
     })
+    //to return if a user is online
+    socket.on('isonline', async (data, callback) => {
+        if(socket.data.id) {
+            if(USERS[data.user]) {
+                callback({status:true})
+            }
+            else {callback({status:false})}
+        }
+        else {callback({status:'logout'})}
+    })
+    //to send message to another user
+    socket.on('typing', async (data, callback) => {
+        //save to db first
+        if(data.receiver) {
+            if(USERS[socket.data.id]) {
+                if(USERS[socket.data.id].id === socket.id) {
+                    //notify user its typing
+                    if(USERS[data.receiver]) {
+                        if(USERS[data.receiver].data.dao == socket.data.dao) {
+                            USERS[data.receiver].emit('typing', {sender:socket.data.id})
+                        }
+                    }
+                }    
+                else{callback({status:'logout'})}
+            }
+            else{callback({status:'logout'})}
+        }
+        else {
+            callback({status:false})
+        }
+    })
     //disconnected
     socket.on('disconnect', (reason) => {
         //remove from list of servers
         if(socket.data.id){
-          USERS[socket.data.id] = null
+          USERS[socket.data.id] = null //remove user
+          socket.broadcast.emit('offline', {user:socket.data.id}) //broadcast offline
         }
     })
 }
