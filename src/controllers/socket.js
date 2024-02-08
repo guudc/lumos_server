@@ -114,7 +114,7 @@ exports.connect = async (socket, io) => {
         }
         else {callback({status:'logout'})}
     })
-    //to send message to another user
+    //to send is typing signal to another user
     socket.on('typing', async (data, callback) => {
         //save to db first
         if(data.receiver) {
@@ -127,12 +127,23 @@ exports.connect = async (socket, io) => {
                         }
                     }
                 }    
-                else{callback({status:'logout'})}
             }
-            else{callback({status:'logout'})}
         }
-        else {
-            callback({status:false})
+    })
+    //to send not typing signal to another user
+    socket.on('nottyping', async (data, callback) => {
+        //save to db first
+        if(data.receiver) {
+            if(USERS[socket.data.id]) {
+                if(USERS[socket.data.id].id === socket.id) {
+                    //notify user its typing
+                    if(USERS[data.receiver]) {
+                        if(USERS[data.receiver].data.dao == socket.data.dao) {
+                            USERS[data.receiver].emit('nottyping', {sender:socket.data.id})
+                        }
+                    }
+                }    
+            }
         }
     })
     //disconnected
