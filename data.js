@@ -1,1 +1,1 @@
-exports.BACKEND_API = 'https://testing.lumosdao.io/.well-known/asset.php?type='
+exports.BACKEND_API = 'https://develop.lumosdao.io/.well-known/asset.php?type='
