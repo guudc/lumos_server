@@ -9,13 +9,11 @@ const { connect } = require("./src/controllers/socket.js");
 
 app.use("/", route)
 // Certificate
- const privateKey = fs.readFileSync('/etc/letsencrypt/live/nsh16.lumosdao.io/privkey.pem', 'utf8');
- const certificate = fs.readFileSync('/etc/letsencrypt/live/nsh16.lumosdao.io/cert.pem', 'utf8');
- const ca = fs.readFileSync('/etc/letsencrypt/live/nsh16.lumosdao.io/chain.pem', 'utf8');
+ const privateKey = fs.readFileSync('../key.pem', 'utf8');
+ const certificate = fs.readFileSync('../cert.pem', 'utf8');
  const credentials = {
  	key: privateKey,
- 	cert: certificate,
- 	ca: ca
+ 	cert: certificate
  };
 
 const server = createServer(credentials, app);
