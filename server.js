@@ -9,14 +9,14 @@ const { connect } = require("./src/controllers/socket.js");
 
 app.use("/", route)
 // Certificate
- const privateKey = fs.readFileSync('../key.pem', 'utf8');
- const certificate = fs.readFileSync('../cert.pem', 'utf8');
- const credentials = {
- 	key: privateKey,
- 	cert: certificate
- };
+ // const privateKey = fs.readFileSync('../key.pem', 'utf8');
+ // const certificate = fs.readFileSync('../cert.pem', 'utf8');
+ // const credentials = {
+ // 	key: privateKey,
+ // 	cert: certificate
+ // };
 
-const server = createServer(credentials, app);
+const server = createServer(app);
 const io = new Server(server, {cors: {
     origin: "*",
 }});
