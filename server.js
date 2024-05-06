@@ -28,7 +28,7 @@ const io = new Server(server, {cors: {
  // });
 
 let port = process.env.PORT || 4000
-server.listen(port, '0.0.0.0',  () => {
+server.listen(port,  () => {
     console.log('server running at port ' + port);
 });
 io.on('connection', (socket) => {
