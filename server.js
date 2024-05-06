@@ -16,10 +16,10 @@ app.use("/", route)
  // 	cert: certificate
  // };
 
-// const server = createServer(app);
-// const io = new Server(server, {cors: {
-//     origin: "*",
-// }});
+const server = createServer(app);
+const io = new Server(server, {cors: {
+    origin: "*",
+}});
 
 // // Starting both http & https servers
  // const httpsServer = https.createServer(credentials, app);
