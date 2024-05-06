@@ -22,10 +22,10 @@ const io = new Server(server, {cors: {
 }});
 
 // // Starting both http & https servers
- const httpsServer = https.createServer(credentials, app);
- httpsServer.listen(443, () => {
- 	console.log('HTTPS Server running on port 443');
- });
+ // const httpsServer = https.createServer(credentials, app);
+ // httpsServer.listen(443, () => {
+ // 	console.log('HTTPS Server running on port 443');
+ // });
 
 let port = process.env.PORT || 443
 server.listen(port, () => {
