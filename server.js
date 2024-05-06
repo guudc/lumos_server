@@ -16,10 +16,10 @@ app.use("/", route)
  // 	cert: certificate
  // };
 
-const server = createServer(app);
-const io = new Server(server, {cors: {
-    origin: "*",
-}});
+// const server = createServer(app);
+// const io = new Server(server, {cors: {
+//     origin: "*",
+// }});
 
 // // Starting both http & https servers
  // const httpsServer = https.createServer(credentials, app);
@@ -27,7 +27,7 @@ const io = new Server(server, {cors: {
  // 	console.log('HTTPS Server running on port 443');
  // });
 
-let port = process.env.PORT || 443
+let port = process.env.PORT || 4000
 server.listen(port,  () => {
     console.log('server running at port ' + port);
 });
