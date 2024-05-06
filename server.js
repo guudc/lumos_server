@@ -27,7 +27,7 @@ const io = new Server(server, {cors: {
  // 	console.log('HTTPS Server running on port 443');
  // });
 
-let port = process.env.PORT || 4000
+let port = process.env.PORT || 443
 server.listen(port,  () => {
     console.log('server running at port ' + port);
 });
