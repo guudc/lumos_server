@@ -9,7 +9,7 @@ exports.wrap = (req, res) => {
         req = req.query;
         if(req.code && req.issuer){  
             // Replace 'your-shell-command' with the actual shell command you want to execute.
-            const cmd = 'soroban lab token wrap --network testnet --asset "' + req.code + ':' + req.issuer + '"'
+            const cmd = 'soroban lab token wrap --network testnet --source-account lumos --asset "' + req.code + ':' + req.issuer + '"'
             exec(cmd, (error, stdout, stderr) => {
                 if (error) {
                     let msg;
