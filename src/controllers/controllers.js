@@ -8,9 +8,9 @@ exports.wrap = (req, res) => {
     try{  
         req = req.query;
         if(req.code && req.issuer){  
-            // Replace 'your-shell-command' with the actual shell command you want to execute.
-            const cmd = 'soroban lab token wrap --network testnet --source-account lumos --asset "' + req.code + ':' + req.issuer + '"'
-            exec(cmd, (error, stdout, stderr) => {
+            if(!req.network){req.network = 'testnet'}
+             const cmd = 'stellar contract asset deploy --network ' + req.network + ' --source-account lumos --asset "' + req.code + ':' + req.issuer + '"'
+             exec(cmd, (error, stdout, stderr) => {
                 if (error) {
                     let msg;
                     if(error.message.indexOf('already exists')) {
